@@ -1,0 +1,113 @@
+<div class="row">
+  <div class="col-lg-12 mb-4">
+      <div widget class="card border-0 box-shadow">
+          <div class="card-header transparent border-0 text-muted">
+              <h5 class="mb-0">Consulter les comptes</h5>
+          </div>
+          <div class="card-body pt-0 widget-body">
+              <dx-data-grid id="gridContainer" #grid [dataSource]="listComptes" [showBorders]="true"
+                  [rowAlternationEnabled]="true" [allowColumnReordering]="true" [allowColumnResizing]="true"
+                  [columnMinWidth]="50" [hoverStateEnabled]="true" columnResizingMode="widget" 
+                  (onToolbarPreparing)="onToolbarPreparingCompte($event)" [masterDetail]="{ enabled: true, template: 'detail' }"
+                  >
+
+                  <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                  <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                  <dxo-export [enabled]="true" fileName="Affiliés"></dxo-export>
+                  <dxi-column dataField="rib" caption="Rib" ></dxi-column>
+                  <dxi-column dataField="ex_personne" caption="Ex_personne" ></dxi-column>
+                  <dxi-column dataField="typeCompte.type_2" caption="Type du compte" ></dxi-column>
+                  <!-- <dxi-column dataField="Actions" [width]="108" [allowFiltering]="false" [allowHeaderFiltering]="false"
+                  [allowSorting]="false" cellTemplate="cemplate" alignment="right" ></dxi-column>
+                  <div *dxTemplate="let data of 'cemplate'">
+                    <i class="fa fa-briefcase" data-toggle="tooltip" title="Credit" (click)="openCredit(data.data.credit)"></i>
+                    <i class="fa fa-eye" data-toggle="tooltip" title="assurances" (click)="openAssurance(data.data.credit.assurance_has_Credit)"></i>
+                  </div> -->
+        
+                  <dxo-paging [pageSize]="10"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+                  </dxo-pager>
+                  <dxo-filter-row [visible]="true"></dxo-filter-row>
+                  <dxo-group-panel [visible]="true"></dxo-group-panel>
+                  <div *dxTemplate="let compte of 'detail'">
+                    <div class="row">
+                        <div class="col-lg-12 mb-4">
+                            <div widget class="card border-0 box-shadow">
+                                <div class="card-header transparent border-0 text-muted">
+                                    <h5 class="mb-0">Consulter les Crédits de {{compte.data.ex_personne}}</h5>
+                                </div>
+                                <div class="card-body pt-0 widget-body">
+                    
+                                
+                      <dx-data-grid
+                          [dataSource]="compte.data.credit"
+                          [showBorders]="true"
+                          [columnAutoWidth]="true"
+                          [showBorders]="true"
+                  [rowAlternationEnabled]="true" [allowColumnReordering]="true" [allowColumnResizing]="true"
+                  [columnMinWidth]="50" [hoverStateEnabled]="true" columnResizingMode="widget" [masterDetail]="{ enabled: true, template: 'details' }"
+                  (onToolbarPreparing)="onToolbarPreparingCredit($event,compte.data.idCompte)"
+                  >
+
+                              <dxi-column dataField="souscripteur"></dxi-column>
+                              <dxi-column dataField="capital"></dxi-column>
+                              <dxi-column dataField="date" dataType="date" format="dd/MM/yyy"></dxi-column>
+                              <div *dxTemplate="let credit of 'details'">
+                                    <div class="row">
+                                            <div class="col-lg-12 mb-4">
+                                                <div widget class="card border-0 box-shadow">
+                                                    <div class="card-header transparent border-0 text-muted">
+                                                        <h5 class="mb-0">Consulter les assurances liées au crédit {{credit.data.souscripteur}}</h5>
+                                                    </div>
+                                                    <div class="card-body pt-0 widget-body">
+                                  <dx-data-grid
+                                      [dataSource]="credit.data.assurance_has_Credit"
+                                      [showBorders]="true"
+                                      [columnAutoWidth]="true"
+                                      [showBorders]="true"
+                                      [rowAlternationEnabled]="true" [allowColumnReordering]="true" [allowColumnResizing]="true"
+                                      [columnMinWidth]="50" [hoverStateEnabled]="true" columnResizingMode="widget"
+                                      (onToolbarPreparing)="onToolbarPreparingAssurance($event,credit.data.idCredit)">
+                                      
+                                          <dxi-column dataField="assurance.typeAssurance" caption="Type assurance"></dxi-column>
+                                          <dxi-column dataField="assurance.montant" caption="Montant"></dxi-column>
+                                          <dxo-filter-row [visible]="true"></dxo-filter-row>
+                            <dxo-group-panel [visible]="true"></dxo-group-panel>
+                            <dxo-sorting mode="multiple"></dxo-sorting>
+                            <dxo-search-panel [visible]="true" [width]="240" placeholder="Rechercher..."></dxo-search-panel>
+                            <dxo-paging [pageSize]="10"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+                            </dxo-pager>
+                            <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                            <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                            <dxo-export [enabled]="true" fileName="Assurances"></dxo-export>
+                                  </dx-data-grid>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                              </div>
+                            <dxo-filter-row [visible]="true"></dxo-filter-row>
+                            <dxo-group-panel [visible]="true"></dxo-group-panel>
+                            <dxo-sorting mode="multiple"></dxo-sorting>
+                            <dxo-search-panel [visible]="true" [width]="240" placeholder="Rechercher..."></dxo-search-panel>
+                            <dxo-paging [pageSize]="10"></dxo-paging>
+                            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[5, 10, 20]" [showInfo]="true">
+                            </dxo-pager>
+                            <dxo-column-chooser [enabled]="true"></dxo-column-chooser>
+                            <dxo-load-panel [enabled]="true"></dxo-load-panel>
+                            <dxo-export [enabled]="true" fileName="Credits"></dxo-export>
+                      </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+                  </div>
+                  <dxo-sorting mode="multiple"></dxo-sorting>
+                  <dxo-search-panel [visible]="true" [width]="240" placeholder="Rechercher..."></dxo-search-panel>
+              </dx-data-grid>
+
+          </div>
+      </div>
+  </div>
+</div>
